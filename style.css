@@ -64,6 +64,9 @@ th {
 th {
   font-size: 18px;
 }
+.OptBtn{
+  margin: 4px;
+}
 
 @media screen and (max-width: 896px) {
   #workspace {

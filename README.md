@@ -15,3 +15,8 @@ features
     2. Added employes will be displayed( dynamically ) on the webpaage using a table
     3. Every employee added can be deleted.
     4.  Adding edit functionality to previously added employees.
+
+Screenshots:
+
+![landcape](https://github.com/YashSharma412/Employee_Management_System/assets/139811734/e2df6c69-2716-48ad-bc84-df1e25f49562)
+![portrait](https://github.com/YashSharma412/Employee_Management_System/assets/139811734/77326ba6-fa9c-46e0-aa5e-5b4cae5a8838)

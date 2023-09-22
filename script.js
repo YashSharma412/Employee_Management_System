@@ -61,8 +61,8 @@ function addEmployee(employee) {
         <td>${employee.company}</td>
         <td>${employee.designation}</td>
         <td>
-            <button class="delBtn" onclick="deleteEmployee(this)" data-empId="${employee.empId}">Delete</button>
-            <button class="editBtn" onclick="editEmployee(this)" data-empId="${employee.empId}">Edit</button>
+            <button class="OptBtn" onclick="deleteEmployee(this)" data-empId="${employee.empId}">Delete</button>
+            <button class="OptBtn" onclick="editEmployee(this)" data-empId="${employee.empId}">Edit</button>
         </td>
     `;
 
