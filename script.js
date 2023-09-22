@@ -13,17 +13,17 @@
     4.  Adding edit functionality to previously added employees.
 
 */
-
-
 const form = document.getElementById("form");
 const tbody = document.getElementById("tbody");
 const formBtn = document.getElementById("formBtn");
 
 const employees = []; // array stores list of all employee object present in table;
+let editingIndex = null; // to keep track of which employee we're editing
 
 // Implimenting add employee/submit button functionality for the form
 form.addEventListener("submit", (event) => {
   event.preventDefault(); // ensures the default behaviour of refreshing page does not occur on submit
+
   let employee = {
     empName: event.target.empName.value, //event.target reffers to form in this context
     email: event.target.email.value, //event.target.email reffers to the input of form elemnet which has email as name value
@@ -31,16 +31,39 @@ form.addEventListener("submit", (event) => {
     company: event.target.company.value,
     designation: event.target.designation.value,
   };
-  // console.log(employee);
-  // we need to add this object inside the tables <tr>.
-  //to do so we call funtion(1) add employee
-  addEmployee(employee);
+  console.log(editingIndex);
+  if (editingIndex !== null) {
+    // In case we are in editing mode
+    //Check for any changes that may lead to repeated data in existing array
+    console.log("entered");
+    let count = 0;
+    for (let i = 0; i < employees.length; i++) {
+      if (i !== editingIndex && employees[i].email === employee.email) {
+        alert("Email already in use.");
+        return;
+      } else if (i !== editingIndex && employees[i].empId === employee.empId) {
+        alert("Employee ID already exists");
+        return;
+      }
+    }
+    // employees[editingIndex] = employee; //Replace new object with old object in array employees
+    employees.splice(editingIndex, 1);
+    tbody.children[editingIndex].remove();
+    addEmployee(employee);
+    formBtn.innerText = "Add Employee";
+    editingIndex = null; //reseting editingIndex
+  } else {
+    // we need to add this object inside the tables <tr>.
+    //to do so we call funtion(1) add employee
+    addEmployee(employee);
+  }
+  form.reset();
 });
 
 //function 1.> This function will take an object and add its key value pairs accordingly into the table.
 function addEmployee(employee) {
   // if the enetered employee already exists in the list it would show an alert and not add the employee to the list
-  formBtn.innerText="Add Employee";
+  // formBtn.innerText="Add Employee";
   for (let i = 0; i < employees.length; i++) {
     let emp = employees[i];
     if (emp.email === employee.email) {
@@ -68,15 +91,15 @@ function addEmployee(employee) {
 
   // appends the tr to the tbody of table
   tbody.appendChild(tr);
-
   employees.push(employee);
+
   //after adding employee to the table, we will clear form entries.
   form.reset();
 }
 
 // function 2.> Delete employee function implementation, called on-click of dynamically added delete btn.
 function deleteEmployee(btnRef) {
-    // console.log(btnRef);
+  // console.log(btnRef);
   let empId = btnRef.getAttribute("data-empId");
   // remove from employees array list
   for (let i = 0; i < employees.length; i++) {
@@ -94,25 +117,40 @@ function deleteEmployee(btnRef) {
   parentTr.remove(); // removes the tr from dom tree
 }
 
-//function 3.> Edit employee feature implementaion, called on-click of dynamically added delete btn.
-function editEmployee(btnRef){
-    let empId = btnRef.getAttribute("data-empId");
-    // console.log(empId, btnRef);
-    formBtn.innerText="Save Changes";
-    let empTobeEdited;
-    for (let i = 0; i < employees.length; i++) {
-        if (employees[i].empId === empId) {
-          empTobeEdited = employees[i];
-          break;
-        }
-      }
-    // console.log(empTobeEdited);
-//  employee details to be edited will be moved back to form
-    for (let key in empTobeEdited) {
-        form.elements[key].value = empTobeEdited[key];
-    }
+//function 3.> Edit employee feature implementaion, called on-click of dynamically added edit btn.
+function editEmployee(btnRef) {
+  let empId = btnRef.getAttribute("data-empId");
+  formBtn.innerHTML = "Save Changes";
 
-//  deleteing the employee entry from table and employees array to allow resubmition.  
-    let delBtnRef = btnRef.previousElementSibling;
-    deleteEmployee(delBtnRef);
+  for (let i = 0; i < employees.length; i++) {
+    if (employees[i].empId === empId) {
+      editingIndex = i;
+      console.log(editingIndex);
+      for (let key in employees[i]) {
+        form.elements[key].value = employees[i][key];
+      }
+      break;
+    }
+  }
 }
+// function editEmployee(btnRef){
+//     let empId = btnRef.getAttribute("data-empId");
+//     // console.log(empId, btnRef);
+//     formBtn.innerText="Save Changes";
+//     let empTobeEdited;
+//     for (let i = 0; i < employees.length; i++) {
+//         if (employees[i].empId === empId) {
+//           empTobeEdited = employees[i];
+//           break;
+//         }
+//       }
+//     console.log(empTobeEdited);
+//  employee details to be edited will be moved back to form
+//     for (let key in empTobeEdited) {
+//         form.elements[key].value = empTobeEdited[key];
+//     }
+
+// //  deleteing the employee entry from table and employees array to allow resubmition.
+//     let delBtnRef = btnRef.previousElementSibling;
+//     deleteEmployee(delBtnRef);
+// }
